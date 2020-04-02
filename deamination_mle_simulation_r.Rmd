@@ -1,0 +1,31 @@
+---
+title: "Deamination GLM Simulation"
+author: "Lee Carlin"
+date: "3/26/2020"
+output: html_document
+---
+
+```{r}
+n_i <- 300
+m_i <- 0.7
+
+p_high <- 0.4
+p_low <- 0.2
+p_i <- c(rep(p_high,10),rep(p_low,n_i-10))
+
+t_i <- rbinom(n_i,1,p_i*m_i)
+out.quasi <- glm(t_i ~  p_i, family = quasi(variance = "mu(1-mu)"),start = c(0.5, 0), )  
+sum(out.quasi$coefficients)
+summary(out.quasi, dispersion = 1)
+
+```
+
+```{r}
+plot(p_i,t_i)
+curve(predict(out.quasi, data.frame(x = p_i)), add = TRUE)
+```
+
+
+
+
+
